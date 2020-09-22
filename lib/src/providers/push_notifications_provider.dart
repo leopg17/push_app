@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PushNotificationsProvider {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final _mensajesStreamController = StreamController<String>.broadcast();
+  Stream<String> get mensajesStream => _mensajesStreamController.stream;
 
   static Future<dynamic> onBackgroundMessage(
       Map<String, dynamic> message) async {
@@ -38,25 +42,32 @@ class PushNotificationsProvider {
   Future<dynamic> onMessage(Map<String, dynamic> message) async {
     // Or do other work.
     print('====== onMessage ======');
-    print('message: $message');
+    // print('message: $message');
+    // print('argumento: $argumento');
 
     final argumento = message['data']['comida'];
-    print('argumento: $argumento');
+    _mensajesStreamController.sink.add(argumento);
   }
 
   Future<dynamic> onLaunch(Map<String, dynamic> message) async {
     // Or do other work.
     print('====== onLaunch ======');
-    print('message: $message');
+    // print('message: $message');
+    // print('argumento: $argumento');
     final argumento = message['data']['comida'];
-    print('argumento: $argumento');
+    _mensajesStreamController.sink.add(argumento);
   }
 
   Future<dynamic> onResume(Map<String, dynamic> message) async {
     // Or do other work.
     print('====== onResume ======');
-    print('message: $message');
+    // print('message: $message');
+    // print('argumento: $argumento');
     final argumento = message['data']['comida'];
-    print('argumento: $argumento');
+    _mensajesStreamController.sink.add(argumento);
+  }
+
+  dispose() {
+    _mensajesStreamController?.close();
   }
 }
